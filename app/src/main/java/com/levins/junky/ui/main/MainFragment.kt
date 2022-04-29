@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.*
 import ManagePermissions
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintProperties
 import androidx.recyclerview.widget.GridLayoutManager
@@ -86,13 +87,23 @@ class MainFragment : Fragment() {
             if(questionItem.type.equals("text"))
                 createTextQuestionInForm(questionItem)
         }
+        createSubmitButton()
     }
+
+    private fun createSubmitButton() {
+        val button = Button(requireContext())
+        button.id = View.generateViewId()
+        button.layoutParams = verticalConstraint()
+        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_200))
+        button.setText("Submit")
+        main.addView(button)
+    }
+
     private fun createTextQuestionInForm(questionItem: questionsItem?){
+        val cardview = CardView(requireContext())
         val textview = TextView(requireContext())
-//        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         textview.id = View.generateViewId()
         val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-//        constraintParams.topToBottom = verticalConstraint()
         textview.layoutParams = verticalConstraint()
         textview.setText(questionItem?.question.toString())
         main.addView(textview)
