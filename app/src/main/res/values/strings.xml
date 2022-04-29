@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">GotechApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="contentDescription">add new pile.</string>
+    <string name="description">תיאור הערימה</string>
+    <string name="pileName">כותרת הערימה</string>
+    <string name="headline">כותרת</string>
+    <string name="descriptionHint">כסא,שולחן</string>
+    <string name="headlineHint">ערימה</string>
+    <string name="place">מיקום</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB-fqYo-nmmLHkLQlkfYrIA2JKaszGXL_I</string>
+    <string name="title_activity_login">התחברות משתמשים</string>
+<!--    <string name="prompt_email">Email</string>-->
+<!--    <string name="prompt_password">Password</string>-->
+<!--    <string name="action_sign_in">התחבר או הרשם</string>-->
+<!--    <string name="action_sign_in_short">Sign in</string>-->
+<!--    <string name="welcome">"ברוך הבא משתמש חדש ! "</string>-->
+<!--    <string name="invalid_username">מספר טלפון של 10 ספרות</string>-->
+<!--    <string name="invalid_password">סיסמא חייבת להיות מעל 5 תוים</string>-->
+<!--    <string name="login_failed">"כניסת המשתמש נכשלה"</string>-->
+<!--    <string name="verification_succeeded">"אימות המספר הצליח"</string>-->
+<!--    <string name="verification_failed">"אימות המספר נכשל"</string>-->
+<!--    <string name="invalid_code">קוד עם 6 ספרות לפחות</string>-->
+<!--    <string name="errorMessage">אימות מספר טלפון נכשל,אנא נסה שנית !</string>-->
+<!--    <string name="prompt_phone">מספר טלפון</string>-->
+<!--    <string name="prompt_code">קוד סודי מהאסאמאס</string>-->
+<!--    <string name="permissionRequestLink">.לחץ כאן ואז אשר את הרשאות האיחסון, כדי לראות את רשימת הערימות</string>-->
+<!--    <string name="must_be_filled">חובה למלא</string>-->
+<!--    <string name="please_take_a_picture">יש לצלם תמונה של הערימה</string>-->
+<!--    <string name="settings">הגדרות</string>-->
+<!--    <string name="logout">התנתק</string>-->
+<!--    <string name="sendTheCode">שלח !</string>-->
+<!--    <string name="addPileFragTitle">פרסום ערימה חדשה</string>-->
+    <string name="itemFragmentTitle">ערימה</string>
+    <string name="nowYouCanAddPiles">עכשיו כשהכפתור ירוק,ניתן להוסיף ערימות !</string>
+<!--    <string name="withoutConfirmingYouCantsharePiles">ללא אישור ההרשאה,לא ניתן לפרסם ערימות .</string>-->
+<!--    <string name="login_explain">נדרש רישום עם מספר הטלפון בכדי להוסיף ערימה חדשה.</string>-->
+<!--    <string name="login_explain_after_code_sent">מיד תקבל הודעה עם קוד סודי. מלא את הקוד הסודי ולחץ על שלח.</string>-->
+
+</resources>
