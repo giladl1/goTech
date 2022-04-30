@@ -95,7 +95,12 @@ class MainFragment : Fragment() {
     private fun createSubmitButton() {
         val button = Button(requireContext())
         button.id = View.generateViewId()
-        button.layoutParams = verticalConstraint()
+//        button.layoutParams = verticalConstraint()
+        var params = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        params.topToBottom = lastView.id
+        params.setMargins(60)
+        params.leftMargin = 260
+        button.layoutParams = params
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_200))
         button.setText("Submit")
         main.addView(button)
@@ -107,6 +112,9 @@ class MainFragment : Fragment() {
         textview.id = View.generateViewId()
         cardview.id = View.generateViewId()
         val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        constraintParams.topMargin = 60
+        constraintParams.bottomMargin = 60
+        textview.layoutParams = constraintParams
         cardview.layoutParams = verticalConstraint()
         cardview.radius = 20F
         textview.setText(questionItem?.question.toString())
@@ -115,6 +123,8 @@ class MainFragment : Fragment() {
         val editText = EditText(requireContext())
         val editTextConstraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         editTextConstraintParams.topToBottom = textview.id
+        editTextConstraintParams.topMargin = 120
+        editTextConstraintParams.bottomMargin = 60
         editText.layoutParams = editTextConstraintParams
         cardview.addView(editText)
         main.addView(cardview)
@@ -124,6 +134,10 @@ class MainFragment : Fragment() {
         val cardview = CardView(requireContext())
         val textview = TextView(requireContext())
 //        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        constraintParams.topMargin = 60
+        constraintParams.bottomMargin = 60
+        textview.layoutParams = constraintParams
         cardview.layoutParams = verticalConstraint()
         cardview.radius = 20F
         textview.setText(questionItem?.question.toString())
@@ -144,7 +158,8 @@ class MainFragment : Fragment() {
 //        radioGroup.id = View.generateViewId()
         val radioGroupConstraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         radioGroupConstraintParams.topToBottom = textview.id
-        radioGroupConstraintParams.topMargin = 50
+        radioGroupConstraintParams.topMargin = 120
+        radioGroupConstraintParams.bottomMargin = 60
         radioGroup.layoutParams = radioGroupConstraintParams
         cardview.addView(radioGroup)
         main.addView(cardview)
@@ -166,20 +181,6 @@ class MainFragment : Fragment() {
             return params
         }
 
-    }
-    private fun operateAdapterWithList(list: List<numberWithData>) {
-        Log.v("operate adapter","work")
-        viewManager = GridLayoutManager(context,3) //LinearLayoutManager(context)
-        viewAdapter = RecyclerAdapter2(requireContext() , list)
-        pileRecyclerView.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-//            setHasFixedSize(true)//todo bring back
-            // use a linear layout manager
-            layoutManager = viewManager
-            // specify an viewAdapter (see also next example)
-            adapter = viewAdapter
-        }
     }
     override fun onStart() {
         super.onStart()

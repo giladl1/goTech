@@ -1,8 +1,5 @@
 package com.levins.junky
 
-import com.levins.junky.databinding.FragmentMapViewBinding
-import com.levins.junky.repository.PileRepository
-import com.levins.junky.ui.main.ItemActivityFragment
 import org.junit.Test
 
 import org.junit.Assert.*
