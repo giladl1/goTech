@@ -29,6 +29,8 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintProperties
+import androidx.core.view.marginTop
+import androidx.core.view.setMargins
 import androidx.recyclerview.widget.GridLayoutManager
 import com.levins.junky.*
 
@@ -103,45 +105,64 @@ class MainFragment : Fragment() {
         val cardview = CardView(requireContext())
         val textview = TextView(requireContext())
         textview.id = View.generateViewId()
+        cardview.id = View.generateViewId()
         val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-        textview.layoutParams = verticalConstraint()
+        cardview.layoutParams = verticalConstraint()
+        cardview.radius = 20F
         textview.setText(questionItem?.question.toString())
-        main.addView(textview)
-        lastView = textview
+        cardview.addView(textview)
+        ////////////////////////
+        val editText = EditText(requireContext())
+        val editTextConstraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        editTextConstraintParams.topToBottom = textview.id
+        editText.layoutParams = editTextConstraintParams
+        cardview.addView(editText)
+        main.addView(cardview)
+        lastView = cardview
     }
     private fun createMultiQuestionInForm(questionItem: questionsItem?) {
+        val cardview = CardView(requireContext())
         val textview = TextView(requireContext())
 //        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-        val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-//        constraintParams.topToBottom = verticalConstraint()
-        textview.id = View.generateViewId()
-        textview.layoutParams = verticalConstraint()
+        cardview.layoutParams = verticalConstraint()
+        cardview.radius = 20F
         textview.setText(questionItem?.question.toString())
-        main.addView(textview)
-        lastView = textview
+        textview.id = View.generateViewId()
+//        textview.layoutParams = verticalConstraint()
+        cardview.addView(textview)
+//        main.addView(textview)
+//        lastView = textview
         //////////////////
         val radioGroup = RadioGroup(requireContext())
-        radioGroup.id = View.generateViewId()
+//        radioGroup.id = View.generateViewId()
         for(answer in questionItem?.answers!!){
             var radioButton = RadioButton(requireContext())
             radioButton.setText(answer.toString())
             radioGroup.addView(radioButton)
         }
 //        constraintParams.topToBottom = verticalConstraint()
-        radioGroup.layoutParams = verticalConstraint()
-        main.addView(radioGroup)
-        lastView = radioGroup
+//        radioGroup.id = View.generateViewId()
+        val radioGroupConstraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        radioGroupConstraintParams.topToBottom = textview.id
+        radioGroupConstraintParams.topMargin = 50
+        radioGroup.layoutParams = radioGroupConstraintParams
+        cardview.addView(radioGroup)
+        main.addView(cardview)
+        cardview.id = View.generateViewId()
+        lastView = cardview
 
     }
     private fun verticalConstraint(): ConstraintLayout.LayoutParams {
         if(lastView.equals(main)) {
             var params = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
             params.topToTop = lastView.id
+            params.setMargins(40)
             return params
         }
         else{
             var params = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
             params.topToBottom = lastView.id
+            params.setMargins(40)
             return params
         }
 

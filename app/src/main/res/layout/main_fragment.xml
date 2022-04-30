@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#37AD0EF1"
     tools:context=".ui.main.MainFragment">
 
     <TextView
@@ -50,23 +51,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="50dp" />
-<!--    android:src="@android:drawable/ic_menu_add"-->
+    <!--    android:src="@android:drawable/ic_menu_add"-->
     <!-- ic_menu_add"-->
-<!--    android:id="@+id/fabUploadPile"-->
-<!--    android:layout_width="wrap_content"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:layout_marginTop="80dp"-->
-<!--    android:layout_marginBottom="60dp"-->
-<!--    android:backgroundTint="#4CAF50"-->
-<!--    android:clickable="true"-->
-<!--    android:src="?android:attr/textCheckMark"-->
-<!--    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--    app:layout_constraintEnd_toEndOf="parent"-->
-<!--    app:layout_constraintHorizontal_bias="0.498"-->
-<!--    app:layout_constraintStart_toStartOf="parent"-->
-<!--    app:layout_constraintTop_toBottomOf="@+id/imageViewAddPile" />-->
-<!--    app:layout_constraintTop_toBottomOf="@+id/imageViewAddPile"-->
-<!--    app:layout_constraintVertical_bias="0.932" />-->
+    <!--    android:id="@+id/fabUploadPile"-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:layout_marginTop="80dp"-->
+    <!--    android:layout_marginBottom="60dp"-->
+    <!--    android:backgroundTint="#4CAF50"-->
+    <!--    android:clickable="true"-->
+    <!--    android:src="?android:attr/textCheckMark"-->
+    <!--    app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--    app:layout_constraintEnd_toEndOf="parent"-->
+    <!--    app:layout_constraintHorizontal_bias="0.498"-->
+    <!--    app:layout_constraintStart_toStartOf="parent"-->
+    <!--    app:layout_constraintTop_toBottomOf="@+id/imageViewAddPile" />-->
+    <!--    app:layout_constraintTop_toBottomOf="@+id/imageViewAddPile"-->
+    <!--    app:layout_constraintVertical_bias="0.932" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pileRecyclerView"
