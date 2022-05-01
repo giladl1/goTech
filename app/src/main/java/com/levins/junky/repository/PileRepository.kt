@@ -38,7 +38,7 @@ class PileRepository(/*private val pileDao: DaoAccess,*/ val applicationContext:
                     }
                     val jobSender = CoroutineScope(currentCoroutineContext()).launch {
                         val dataSource = PilesDataSource()
-                        dataSource.getPilesDataDynamicly(channelRetrofit)
+                        dataSource.getQuestionsDynamically(channelRetrofit)
                     }
                 }
 

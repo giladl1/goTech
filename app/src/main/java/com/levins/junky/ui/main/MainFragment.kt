@@ -36,7 +36,6 @@ import com.levins.junky.*
 
 class MainFragment : Fragment() {
     public lateinit var viewAdapter: RecyclerView.Adapter<*>
-    lateinit var viewManager: RecyclerView.LayoutManager
     lateinit var repository : PileRepository
     lateinit var viewModel: MainViewModel
     lateinit var permissions :List<String>
@@ -58,7 +57,7 @@ class MainFragment : Fragment() {
         repository = ((activity?.application as JunkyApplication).repository)
         lifecycleScope.launch() {
         }
-        (activity as MainActivity).setTitle("Junkie")
+        (activity as MainActivity).setTitle("Gotech")
 
 
 
@@ -66,21 +65,32 @@ class MainFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myToolbar.inflateMenu(R.menu.sample_menu)
         lastView = main
     }
     private fun engageRepository() {
-        progressBar.visibility = View.VISIBLE
         viewModel = ViewModelProvider(this, MainViewModelFactory(repository))
             .get(MainViewModel::class.java )
         viewModel.getQuestions()
         Log.v("operate adapter","before")
         viewModel.questions.observe(viewLifecycleOwner, Observer {
-            progressBar.visibility = View.GONE
             operateQuestionaireWithList(it)
-            //operateAdapterWithList(it)
         })
     }
+    private fun engageRepositoryToGetQuestions() {
+        viewModel.getQuestions()
+        Log.v("operate adapter","before")
+        viewModel.questions.observe(viewLifecycleOwner, Observer {
+            operateQuestionaireWithList(it)
+        })
+    }
+//    private fun engageRepositoryToSendAnswers() {
+//        viewModel.sendAnswers()
+//        Log.v("operate adapter","before")
+//        viewModel.answers.observe(viewLifecycleOwner, Observer {
+//            operateQuestionaireWithList(it)
+//        })
+//    }
+
 
     private fun operateQuestionaireWithList(questions: List<questionsItem>?) {
         for(questionItem in questions!!) {
@@ -98,8 +108,8 @@ class MainFragment : Fragment() {
 //        button.layoutParams = verticalConstraint()
         var params = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         params.topToBottom = lastView.id
+        params.startToStart = main.id
         params.setMargins(60)
-        params.leftMargin = 260
         button.layoutParams = params
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_200))
         button.setText("Submit")
@@ -112,8 +122,9 @@ class MainFragment : Fragment() {
         textview.id = View.generateViewId()
         cardview.id = View.generateViewId()
         val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-        constraintParams.topMargin = 60
-        constraintParams.bottomMargin = 60
+//        constraintParams.topMargin = 60
+//        constraintParams.bottomMargin = 60
+        constraintParams.setMargins(60)
         textview.layoutParams = constraintParams
         cardview.layoutParams = verticalConstraint()
         cardview.radius = 20F
@@ -125,6 +136,7 @@ class MainFragment : Fragment() {
         editTextConstraintParams.topToBottom = textview.id
         editTextConstraintParams.topMargin = 120
         editTextConstraintParams.bottomMargin = 60
+        editTextConstraintParams.leftMargin = 60
         editText.layoutParams = editTextConstraintParams
         cardview.addView(editText)
         main.addView(cardview)
@@ -135,8 +147,9 @@ class MainFragment : Fragment() {
         val textview = TextView(requireContext())
 //        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-        constraintParams.topMargin = 60
-        constraintParams.bottomMargin = 60
+//        constraintParams.topMargin = 60
+//        constraintParams.bottomMargin = 60
+        constraintParams.setMargins(60)
         textview.layoutParams = constraintParams
         cardview.layoutParams = verticalConstraint()
         cardview.radius = 20F
@@ -160,6 +173,7 @@ class MainFragment : Fragment() {
         radioGroupConstraintParams.topToBottom = textview.id
         radioGroupConstraintParams.topMargin = 120
         radioGroupConstraintParams.bottomMargin = 60
+        radioGroupConstraintParams.leftMargin = 60
         radioGroup.layoutParams = radioGroupConstraintParams
         cardview.addView(radioGroup)
         main.addView(cardview)
@@ -184,8 +198,8 @@ class MainFragment : Fragment() {
     }
     override fun onStart() {
         super.onStart()
-        progressBar.visibility = View.VISIBLE
         engageRepository()
+//        engageRepositoryToGetQuestions()
 
     }
     override fun onResume() {
