@@ -15,9 +15,6 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColorStateList
-import androidx.core.view.allViews
-import androidx.core.view.children
-import androidx.core.view.get
 import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -126,17 +123,21 @@ class MainFragment : Fragment() {
             Log.v("viewcount" , viewcount.toString())
             val answersToSend = produceAnswerList(results)
             engageRepositoryToSendAnswers(answersToSend)
-//            for(child in rootView?.children!!){
-//                val id = child.id
-//                if(child)
-//                for(viewChild in (child as ViewGroup).children){
-//                    val childId = viewChild.javaClass.name
-//                }
-//            }
-            val id = rootView?.get(2)?.id.toString()
+            cleanForm(results)
         })
         main.addView(button)
     }
+
+    private fun cleanForm(viewsToClean: ArrayList<resultItem>) {
+        Toast.makeText(requireContext(), "thank you for answering !", Toast.LENGTH_LONG).show()
+        for(myview in viewsToClean){
+            if(myview.type.equals("multiple"))
+                main.findViewById<RadioGroup>(myview.answerViewId).check(-1)
+            else if (myview.type.equals("text"))
+                (main.findViewById<EditText>(myview.answerViewId)).setText("")
+        }
+    }
+
     //take the answers data from the views in order to send to the server:
     private fun produceAnswerList(results: ArrayList<resultItem>): ArrayList<AnswerInfo> {
         var answersToSend = arrayListOf<AnswerInfo>()
@@ -170,15 +171,12 @@ class MainFragment : Fragment() {
         textview.id = View.generateViewId()
         cardview.id = View.generateViewId()
         val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-//        constraintParams.topMargin = 60
-//        constraintParams.bottomMargin = 60
         constraintParams.setMargins(60)
         textview.layoutParams = constraintParams
         cardview.layoutParams = verticalConstraint()
         cardview.radius = 20F
         textview.setText(questionItem?.question.toString())
         cardview.addView(textview)
-        ////////////////////////
         val editText = EditText(requireContext())
         editText.id = View.generateViewId()
         val editTextConstraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
