@@ -1,5 +1,8 @@
 package com.levins.junky.ui.main
 
+//import com.levins.junky.room.PileDatabase
+//import com.levins.junky.room.Piles
+import ManagePermissions
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -7,32 +10,28 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.*
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColorStateList
+import androidx.core.view.allViews
+import androidx.core.view.children
+import androidx.core.view.get
+import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.levins.junky.JunkyApplication
+import com.levins.junky.MainActivity
+import com.levins.junky.R
 import com.levins.junky.repository.PileRepository
-//import com.levins.junky.room.PileDatabase
-//import com.levins.junky.room.Piles
 import kotlinx.android.synthetic.main.main_fragment.*
-import kotlinx.coroutines.*
-import ManagePermissions
-import android.widget.*
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintProperties
-import androidx.core.view.marginTop
-import androidx.core.view.setMargins
-import androidx.recyclerview.widget.GridLayoutManager
-import com.levins.junky.*
+import kotlinx.coroutines.launch
+import model.AnswerInfo
+
 
 class MainFragment : Fragment() {
     public lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -40,6 +39,7 @@ class MainFragment : Fragment() {
     lateinit var viewModel: MainViewModel
     lateinit var permissions :List<String>
     lateinit var lastView: View
+    lateinit var results : ArrayList<resultItem>
     private lateinit var ManagePermissions: ManagePermissions
     companion object {
         fun newInstance() = MainFragment()
@@ -70,11 +70,11 @@ class MainFragment : Fragment() {
     private fun engageRepository() {
         viewModel = ViewModelProvider(this, MainViewModelFactory(repository))
             .get(MainViewModel::class.java )
-        viewModel.getQuestions()
-        Log.v("operate adapter","before")
-        viewModel.questions.observe(viewLifecycleOwner, Observer {
-            operateQuestionaireWithList(it)
-        })
+//        viewModel.getQuestions()
+//        Log.v("operate adapter","before")
+//        viewModel.questions.observe(viewLifecycleOwner, Observer {
+//            operateQuestionaireWithList(it)
+//        })
     }
     private fun engageRepositoryToGetQuestions() {
         viewModel.getQuestions()
@@ -83,21 +83,28 @@ class MainFragment : Fragment() {
             operateQuestionaireWithList(it)
         })
     }
-//    private fun engageRepositoryToSendAnswers() {
-//        viewModel.sendAnswers()
-//        Log.v("operate adapter","before")
-//        viewModel.answers.observe(viewLifecycleOwner, Observer {
-//            operateQuestionaireWithList(it)
-//        })
-//    }
+    private fun engageRepositoryToSendAnswers(answers: ArrayList<AnswerInfo>) {
+//        var answers = ArrayList<AnswerInfo>()
+//
+//        answers.add(AnswerInfo(question = "what do you like",answer = "kotlin"))
+
+        viewModel.sendAnswers(answers)
+        Log.v("operate adapter","before")
+        viewModel.answers.observe(viewLifecycleOwner, Observer {
+            //operateQuestionaireWithList(it)
+        })
+    }
 
 
     private fun operateQuestionaireWithList(questions: List<questionsItem>?) {
         for(questionItem in questions!!) {
+//            val myResultItem = resultItem(questionItem.question,null,545)
+//            results.add(myResultItem)
             if(questionItem.type.equals("multiple"))
                 createMultiQuestionInForm(questionItem)
             if(questionItem.type.equals("text"))
                 createTextQuestionInForm(questionItem)
+            //todo add array for list
         }
         createSubmitButton()
     }
@@ -113,7 +120,48 @@ class MainFragment : Fragment() {
         button.layoutParams = params
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_200))
         button.setText("Submit")
+        button.setOnClickListener(View.OnClickListener {
+            val rootView = view as ViewGroup?
+            val viewcount = rootView?.childCount
+            Log.v("viewcount" , viewcount.toString())
+            val answersToSend = produceAnswerList(results)
+            engageRepositoryToSendAnswers(answersToSend)
+//            for(child in rootView?.children!!){
+//                val id = child.id
+//                if(child)
+//                for(viewChild in (child as ViewGroup).children){
+//                    val childId = viewChild.javaClass.name
+//                }
+//            }
+            val id = rootView?.get(2)?.id.toString()
+        })
         main.addView(button)
+    }
+    //take the answers data from the views in order to send to the server:
+    private fun produceAnswerList(results: ArrayList<resultItem>): ArrayList<AnswerInfo> {
+        var answersToSend = arrayListOf<AnswerInfo>()
+        //results contain the values of the views and questions data came from the server in the beginning:
+        for(result in results){
+            val question = result.question
+            var answer: String = ""
+            if(result.type.equals("multiple")) { //result.answerViewId.javaClass == EditText()
+                val radioGroupId= result.answerViewId
+                val myRadioGroup = main.findViewById<RadioGroup>(radioGroupId)
+                val checkRadioText = main.findViewById<RadioButton?>(myRadioGroup.checkedRadioButtonId).text
+//                if(checkRadioText.contains(":"))
+//                    answer =  otherEditText.text
+//                else
+                    answer = checkRadioText.toString()
+
+            }
+            else { //the answer is in Edittext
+                val editTextId = result.answerViewId
+                answer = ((main.findViewById<EditText>(editTextId))?.text).toString()
+            }
+            val myAnswer = AnswerInfo(question,answer)
+            answersToSend.add(myAnswer)
+        }
+        return answersToSend
     }
 
     private fun createTextQuestionInForm(questionItem: questionsItem?){
@@ -132,6 +180,7 @@ class MainFragment : Fragment() {
         cardview.addView(textview)
         ////////////////////////
         val editText = EditText(requireContext())
+        editText.id = View.generateViewId()
         val editTextConstraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         editTextConstraintParams.topToBottom = textview.id
         editTextConstraintParams.topMargin = 120
@@ -140,6 +189,10 @@ class MainFragment : Fragment() {
         editText.layoutParams = editTextConstraintParams
         cardview.addView(editText)
         main.addView(cardview)
+        //for the final results when submit is pressed:
+        val myResult = resultItem(questionItem?.question!!,questionItem.type ,editText.id , -1)
+
+        results.add(myResult)
         lastView = cardview
     }
     private fun createMultiQuestionInForm(questionItem: questionsItem?) {
@@ -168,7 +221,7 @@ class MainFragment : Fragment() {
             radioGroup.addView(radioButton)
         }
 //        constraintParams.topToBottom = verticalConstraint()
-//        radioGroup.id = View.generateViewId()
+        radioGroup.id = View.generateViewId()
         val radioGroupConstraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         radioGroupConstraintParams.topToBottom = textview.id
         radioGroupConstraintParams.topMargin = 120
@@ -179,6 +232,10 @@ class MainFragment : Fragment() {
         main.addView(cardview)
         cardview.id = View.generateViewId()
         lastView = cardview
+        //todo finish it:
+        val myResult = resultItem(questionItem.question,questionItem.type,radioGroup.id , 5)
+
+        results.add(myResult)
 
     }
     private fun verticalConstraint(): ConstraintLayout.LayoutParams {
@@ -198,8 +255,10 @@ class MainFragment : Fragment() {
     }
     override fun onStart() {
         super.onStart()
+        results = arrayListOf<resultItem>()
         engageRepository()
-//        engageRepositoryToGetQuestions()
+//        engageRepositoryToSendAnswers()
+        engageRepositoryToGetQuestions()
 
     }
     override fun onResume() {
@@ -222,9 +281,15 @@ class MainFragment : Fragment() {
         }
         floatingActionButton.requestFocus()
     }
-    public fun refreshRecyclerview(){
-        viewAdapter.notifyDataSetChanged()
-    }
+//    public fun refreshRecyclerview(){
+//        viewAdapter.notifyDataSetChanged()
+//    }
 }
+data class resultItem(
+    val question: String ,
+    val type: String ,
+    val answerViewId: Int ,
+    val other: Int //the id of the textView near the other option , if exists
+)
 
 

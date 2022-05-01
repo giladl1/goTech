@@ -1,42 +1,39 @@
 package com.levins.junky.ui.main
 import android.util.Log
 import androidx.lifecycle.*
-import com.levins.junky.numberWithData
 import com.levins.junky.repository.PileRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
+import model.AnswerInfo
 
 class MainViewModel(private val repository: PileRepository) : ViewModel() {
-//    var curLong: String? = null
-//    var curLat: String? = null //the location params saved when the activity is created
-//    var currentPicUri: Uri? = null
-//    private val SELECT_PICTURE = 101
-
     private val _questions = MutableLiveData<List<questionsItem>>()
     val questions: LiveData<List<questionsItem>> = _questions
 
-
-//    private val _userProfile = MutableLiveData<User>()
-//    val userProfile: LiveData<User> = _userProfile
-//    private val _posts = MutableLiveData<List<Post>>()
-//    val posts: LiveData<List<Post>> = _posts
+    private val _answers = MutableLiveData<String>()
+    val answers: LiveData<String> = _answers
 
 
-//    val database : PileDatabase = PileDatabase.getDatabase( )
-//    val repository : PileRepository = PileRepository(database.daoAccess()!!)
 
-//    suspend fun operateFirestore() {
-//        val db = FirebaseFirestore.getInstance()
-//        var resultList: List<Pile>? = null
-//        val piles = ArrayList<Pile>()
-//
-//        resultList  = db.collection("pile").orderBy("time", Query.Direction.DESCENDING)
-//            .get().await()
-//            .documents.mapNotNull {
-//                it.toPile() }//convert documentsnapshop to pile and creating the list
-//            }
-    //    init {
+    fun sendAnswers(answers: ArrayList<AnswerInfo>) {
+            val channelRepoAnswer = Channel<String?>()
+            viewModelScope.launch {
+                repository.insertAnswers( answers , channelRepoAnswer)
+            }
+
+            viewModelScope.launch() {
+                Log.v("piles", "repository.selectAllPiles()")
+                channelRepoAnswer.consumeEach { value ->
+                    println("Consumer 111: $value")
+                    Log.v("channelVerific", "consumeEachViewModelVerific")
+                    _answers.value = value
+                }
+
+            }
+        }
+
+
     fun getQuestions() {
         val channelRepo = Channel<List<questionsItem>?>()
         viewModelScope.launch {

@@ -20,7 +20,7 @@ import java.util.function.Consumer
 
 
 class Controller {
-    lateinit var numList: ArrayList<numberWithData>//MutableList<numberWithData>
+//    lateinit var numList: ArrayList<numberWithData>//MutableList<numberWithData>
     lateinit var questionList: ArrayList<questionsItem>
 //    suspend fun sendAnswers(){
 ////        val answers = arrayListOf<String>()
@@ -49,16 +49,16 @@ class Controller {
                 for(newQuestion in retrofitData.body()!!){
                     questionList.add(newQuestion)
                 }
-                    Log.v(
-                        "responseBody is :",
-                        myStringBuilder.toString()
-                    )
-                    Log.v(
-                        "responseBody is :",
-                        myStringBuilder.toString()
-                    )
-                    numList.sortBy { it.number }
-                    Log.v("response after sort ", numList.toString())
+//                    Log.v(
+//                        "responseBody is :",
+//                        myStringBuilder.toString()
+//                    )
+//                    Log.v(
+//                        "responseBody is :",
+//                        myStringBuilder.toString()
+//                    )
+//                    numList.sortBy { it.number }
+//                    Log.v("response after sort ", numList.toString())
             }
 
         }catch (e:Exception){
@@ -70,7 +70,7 @@ class Controller {
 
     }
 
-    fun sendAnswers() {
+    fun sendAnswers(answers: ArrayList<AnswerInfo>):String {
         val client = OkHttpClient.Builder().build()
 
         val retrofit = Retrofit.Builder()
@@ -90,33 +90,35 @@ class Controller {
 //            userEmail = "alex@gmail.com",
 //            userAge = "32",
 //            userUid = "164E92FC-D37A-4946-81CB-29DE7EE4B124" )
-        val answerInfo = AnswerInfo(
-            question = "aaa",
-            answer = "kjkjklj"
-        )
-        retrofit.addAnswer(answerInfo).enqueue(
-//        retrofit.addUser(userInfo).enqueue(
-            object : Callback<AnswerInfo> {
-                override fun onFailure(call: Call<AnswerInfo>, t: Throwable) {
-                    val aa = "ddd"
-                    //onResult(null)
-                }
+        for(answerInfo in answers) {
+//                val answerInfo =answers[0]
+//        val answerInfo2 = AnswerInfo(
+//            question = "aaa",
+//            answer = "kjkjklj"
+//        )
+            retrofit.addAnswer(answerInfo).enqueue(
+                object : Callback<AnswerInfo> {
+                    override fun onFailure(call: Call<AnswerInfo>, t: Throwable) {
+                        val aa = "ddd"
+                        //onResult(null)
+                    }
+
+                    override fun onResponse(
+                        call: Call<AnswerInfo>,
+                        response: Response<AnswerInfo>
+                    ) {
+                        val response = response.body()
+                        Log.v("response is ", response.toString())
+                    }
 //                override fun onResponse( call: Call<List<AnswerInfo>>, response: Response<AnswerInfo>) {
 //                    val addedUser = response.body()
 //                    //onResult(addedUser)
 //                }
 
-                override fun onResponse(
-                    call: Call<AnswerInfo>,
-                    response: Response<AnswerInfo>
-                ) {
-                    val addedUser = response.body()
-                }
-
 //
-            }
-        )
-
+                }
+            )
+        }
 
 //        val apiService = RestApiService()
 //        val userInfo = UserInfo(  id = null,
@@ -133,7 +135,7 @@ class Controller {
 //                Timber.d("Error registering new user")
 //            }
 //        }
-
+        return "null"
     }
 
     companion object {

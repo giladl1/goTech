@@ -7,6 +7,7 @@ import com.levins.junky.ui.main.questionsItem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
+import model.AnswerInfo
 import model.PilesDataSource
 import kotlin.collections.ArrayList
 
@@ -42,6 +43,28 @@ class PileRepository(/*private val pileDao: DaoAccess,*/ val applicationContext:
                     }
                 }
 
+            suspend fun insertAnswers(
+                answers: ArrayList<AnswerInfo>,
+                channelRepoAnswer: Channel<String?>
+            ) {
+                    //val channelFirestore = Channel<ArrayList<numberWithData>?>()
+                    val channelRetrofit = Channel<String?>()
+                    var answerFromRetrofit: String? //List<questionsItem>? = null
+                    val jobReceiver = CoroutineScope(currentCoroutineContext()).launch {
+
+                        channelRetrofit.consumeEach { value ->
+                            Log.v("channelVerific", "consumeEachViewModelVerific")
+                            answerFromRetrofit = value
+                            /////////////////////
+                            channelRepoAnswer.send(value)
+                        }//consume loop
+                    }
+                    val jobSender = CoroutineScope(currentCoroutineContext()).launch {
+                        val dataSource = PilesDataSource()
+                        dataSource.sendAnswersDynamically( answers,channelRetrofit)
+                    }
+
+            }
             // By default Room runs suspend queries off the main thread, therefore, we don't need to
             // implement anything else to ensure we're not doing long running database work
             // off the main thread.

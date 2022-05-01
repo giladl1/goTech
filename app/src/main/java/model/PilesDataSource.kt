@@ -10,12 +10,20 @@ import kotlinx.coroutines.launch
 class PilesDataSource {
         private val TAG = "FirebasePileService"
 
-    suspend fun sendAnswersDynamically(channel: Channel<ArrayList<questionsItem>?>) {// : ArrayList<Pile>?{// {//getting the pile list from the firestore
+    suspend fun sendAnswersDynamically(answers: ArrayList<AnswerInfo>, channel: Channel<String?>) {// : ArrayList<Pile>?{// {//getting the pile list from the firestore
 
         CoroutineScope(Dispatchers.IO).launch {
-//            var questionList = ArrayList<questionsItem>()
+            var resultString = ""//""
             val controller = Controller()
-            controller.sendAnswers()
+            //controller.sendAnswers()
+
+            resultString = controller.sendAnswers(answers)
+            if(resultString.length > 0) {
+                Log.v("the resultString is: ", resultString.toString())
+                channel.send(resultString)
+            }
+            else
+                Log.v("the resultString is ", "empty")
 //                controller.sendAnswers()
 //            questionList = controller.getQuestions()
 //            if(questionList.size>0) {
