@@ -1,7 +1,5 @@
 package com.levins.junky.ui.main
 
-//import com.levins.junky.room.PileDatabase
-//import com.levins.junky.room.Piles
 import ManagePermissions
 import android.Manifest
 import android.content.pm.PackageManager
@@ -31,7 +29,6 @@ import model.AnswerInfo
 
 
 class MainFragment : Fragment() {
-    public lateinit var viewAdapter: RecyclerView.Adapter<*>
     lateinit var repository : PileRepository
     lateinit var viewModel: MainViewModel
     lateinit var permissions :List<String>
@@ -81,10 +78,6 @@ class MainFragment : Fragment() {
         })
     }
     private fun engageRepositoryToSendAnswers(answers: ArrayList<AnswerInfo>) {
-//        var answers = ArrayList<AnswerInfo>()
-//
-//        answers.add(AnswerInfo(question = "what do you like",answer = "kotlin"))
-
         viewModel.sendAnswers(answers)
         Log.v("operate adapter","before")
         viewModel.answers.observe(viewLifecycleOwner, Observer {
@@ -95,13 +88,10 @@ class MainFragment : Fragment() {
 
     private fun operateQuestionaireWithList(questions: List<questionsItem>?) {
         for(questionItem in questions!!) {
-//            val myResultItem = resultItem(questionItem.question,null,545)
-//            results.add(myResultItem)
             if(questionItem.type.equals("multiple"))
                 createMultiQuestionInForm(questionItem)
             if(questionItem.type.equals("text"))
                 createTextQuestionInForm(questionItem)
-            //todo add array for list
         }
         createSubmitButton()
     }
@@ -109,7 +99,6 @@ class MainFragment : Fragment() {
     private fun createSubmitButton() {
         val button = Button(requireContext())
         button.id = View.generateViewId()
-//        button.layoutParams = verticalConstraint()
         var params = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         params.topToBottom = lastView.id
         params.startToStart = main.id
@@ -175,7 +164,10 @@ class MainFragment : Fragment() {
         textview.layoutParams = constraintParams
         cardview.layoutParams = verticalConstraint()
         cardview.radius = 20F
-        textview.setText(questionItem?.question.toString())
+        if(questionItem?.obligatory!!.equals("yes"))
+            textview.setText(questionItem?.question.toString()+"*")
+        else
+            textview.setText(questionItem?.question.toString())
         cardview.addView(textview)
         val editText = EditText(requireContext())
         editText.id = View.generateViewId()
@@ -196,29 +188,28 @@ class MainFragment : Fragment() {
     private fun createMultiQuestionInForm(questionItem: questionsItem?) {
         val cardview = CardView(requireContext())
         val textview = TextView(requireContext())
-//        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         val constraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-//        constraintParams.topMargin = 60
-//        constraintParams.bottomMargin = 60
         constraintParams.setMargins(60)
         textview.layoutParams = constraintParams
         cardview.layoutParams = verticalConstraint()
         cardview.radius = 20F
-        textview.setText(questionItem?.question.toString())
+        if(questionItem?.obligatory!!.equals("yes"))
+            textview.setText(questionItem?.question.toString()+"*")
+        else
+            textview.setText(questionItem?.question.toString())
         textview.id = View.generateViewId()
-//        textview.layoutParams = verticalConstraint()
         cardview.addView(textview)
-//        main.addView(textview)
-//        lastView = textview
-        //////////////////
         val radioGroup = RadioGroup(requireContext())
-//        radioGroup.id = View.generateViewId()
+        var otherEditText = EditText(requireContext())
         for(answer in questionItem?.answers!!){
             var radioButton = RadioButton(requireContext())
             radioButton.setText(answer.toString())
             radioGroup.addView(radioButton)
+            if(answer.contains(":")) {
+                otherEditText.id=View.generateViewId()
+                radioGroup.addView(otherEditText)
+            }
         }
-//        constraintParams.topToBottom = verticalConstraint()
         radioGroup.id = View.generateViewId()
         val radioGroupConstraintParams = ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
         radioGroupConstraintParams.topToBottom = textview.id
@@ -231,7 +222,7 @@ class MainFragment : Fragment() {
         cardview.id = View.generateViewId()
         lastView = cardview
         //todo finish it:
-        val myResult = resultItem(questionItem.question,questionItem.type,radioGroup.id , 5)
+        val myResult = resultItem(questionItem.question,questionItem.type,radioGroup.id , otherEditText.id)
 
         results.add(myResult)
 
@@ -255,33 +246,9 @@ class MainFragment : Fragment() {
         super.onStart()
         results = arrayListOf<resultItem>()
         engageRepository()
-//        engageRepositoryToSendAnswers()
         engageRepositoryToGetQuestions()
 
     }
-    override fun onResume() {
-        super.onResume()
-        //check if location permission was approved before:
-        val isLocationApproved: Boolean = ContextCompat.checkSelfPermission(
-            activity as MainActivity,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        val isExternalWriteApproved: Boolean = ContextCompat.checkSelfPermission(
-            activity as MainActivity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-        Log.v("islocation ",isLocationApproved.toString())
-        if(isLocationApproved && isExternalWriteApproved)
-            floatingActionButton.backgroundTintList  = getColorStateList(activity as MainActivity,android.R.color.holo_green_light) //resources.getColor(R.color.red)  // setBackgroundTintList(resources.getColor(R.color.red))  //background.setTint(resources.getColor( R.color.red))
-        floatingActionButton.setOnClickListener() {//change to AddPileFragment
-            ManagePermissions.checkPermissions()
-
-        }
-        floatingActionButton.requestFocus()
-    }
-//    public fun refreshRecyclerview(){
-//        viewAdapter.notifyDataSetChanged()
-//    }
 }
 data class resultItem(
     val question: String ,

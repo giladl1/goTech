@@ -6,40 +6,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#37AD0EF1"
-    tools:context=".ui.main.MainFragment">
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:src="@drawable/ic_add_circle_24"
-        app:backgroundTint="@android:color/holo_red_light"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="50dp" />
-
-    <!--    android:src="@android:drawable/ic_menu_add"-->
-    <!-- ic_menu_add"-->
-    <!--    android:id="@+id/fabUploadPile"-->
-    <!--    android:layout_width="wrap_content"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:layout_marginTop="80dp"-->
-    <!--    android:layout_marginBottom="60dp"-->
-    <!--    android:backgroundTint="#4CAF50"-->
-    <!--    android:clickable="true"-->
-    <!--    android:src="?android:attr/textCheckMark"-->
-    <!--    app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--    app:layout_constraintHorizontal_bias="0.498"-->
-    <!--    app:layout_constraintStart_toStartOf="parent"-->
-    <!--    app:layout_constraintTop_toBottomOf="@+id/imageViewAddPile" />-->
-    <!--    app:layout_constraintTop_toBottomOf="@+id/imageViewAddPile"-->
-    <!--    app:layout_constraintVertical_bias="0.932" />-->
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".ui.main.MainFragment"/>

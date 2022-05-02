@@ -1,22 +1,13 @@
 package model
 
 import android.util.Log
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
-import com.levins.junky.numberWithData
-import com.levins.junky.numbers
 import com.levins.junky.ui.main.questions
 import com.levins.junky.ui.main.questionsItem
-import kotlinx.coroutines.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
 import java.lang.StringBuilder
-import java.util.function.Consumer
 
 
 class Controller {
